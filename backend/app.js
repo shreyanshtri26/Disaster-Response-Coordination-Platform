@@ -8,12 +8,15 @@ const rateLimitMiddleware = require('./middleware/rateLimit');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
+const geocodeRoutes = require('./routes/geocode');
+const disasterRoutes = require('./routes/disasters');
+const reportRoutes = require('./routes/reports');
+const resourceRoutes = require('./routes/resources');
 
 // Placeholder for routes (to be implemented)
 // const disasterRoutes = require('./routes/disasters');
 // const reportRoutes = require('./routes/reports');
 // const resourceRoutes = require('./routes/resources');
-// const geocodeRoutes = require('./routes/geocode');
 
 const app = express();
 const server = createServer(app);
@@ -52,10 +55,10 @@ app.get('/health', (req, res) => {
 });
 
 // API routes (to be added)
-// app.use('/api/v1/disasters', disasterRoutes);
-// app.use('/api/v1/reports', reportRoutes);
-// app.use('/api/v1/resources', resourceRoutes);
-// app.use('/api/v1/geocode', geocodeRoutes);
+app.use('/api/v1/disasters', disasterRoutes);
+app.use('/api/v1/reports', reportRoutes);
+app.use('/api/v1/resources', resourceRoutes);
+app.use('/api/v1/geocode', geocodeRoutes);
 
 // Socket.IO setup (placeholder for handlers)
 io.on('connection', (socket) => {
