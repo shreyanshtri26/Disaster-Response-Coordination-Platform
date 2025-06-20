@@ -19,6 +19,9 @@ exports.listResources = async (req, res, next) => {
 exports.createResource = async (req, res, next) => {
   try {
     const resource = await supabaseService.createResource(req.validatedData);
+    if (req.app && req.app.get('io')) {
+      req.app.get('io').emit('resource_created', resource);
+    }
     res.status(201).json(resource);
   } catch (err) {
     next(err);

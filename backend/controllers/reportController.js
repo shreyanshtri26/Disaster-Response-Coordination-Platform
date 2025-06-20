@@ -17,6 +17,9 @@ exports.createReport = async (req, res, next) => {
       ...req.validatedData,
       user_id: req.user.id
     });
+    if (req.app && req.app.get('io')) {
+      req.app.get('io').emit('report_created', report);
+    }
     res.status(201).json(report);
   } catch (err) {
     next(err);

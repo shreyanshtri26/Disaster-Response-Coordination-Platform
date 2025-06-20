@@ -12,6 +12,10 @@ const geocodeRoutes = require('./routes/geocode');
 const disasterRoutes = require('./routes/disasters');
 const reportRoutes = require('./routes/reports');
 const resourceRoutes = require('./routes/resources');
+const socialMediaRoutes = require('./routes/socialMedia');
+const officialUpdatesRoutes = require('./routes/officialUpdates');
+const imageVerificationRoutes = require('./routes/imageVerification');
+const socketHandlers = require('./websocket/socketHandlers');
 
 // Placeholder for routes (to be implemented)
 // const disasterRoutes = require('./routes/disasters');
@@ -59,6 +63,9 @@ app.use('/api/v1/disasters', disasterRoutes);
 app.use('/api/v1/reports', reportRoutes);
 app.use('/api/v1/resources', resourceRoutes);
 app.use('/api/v1/geocode', geocodeRoutes);
+app.use('/api/v1/social-media', socialMediaRoutes);
+app.use('/api/v1/official-updates', officialUpdatesRoutes);
+app.use('/api/v1/verify-image', imageVerificationRoutes);
 
 // Socket.IO setup (placeholder for handlers)
 io.on('connection', (socket) => {
@@ -68,6 +75,8 @@ io.on('connection', (socket) => {
   });
 });
 
+socketHandlers(io);
+
 // Error handling
 app.use(errorHandler);
 
@@ -75,5 +84,7 @@ app.use(errorHandler);
 app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
+
+app.set('io', io);
 
 module.exports = { app, server, io }; 

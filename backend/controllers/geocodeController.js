@@ -1,12 +1,16 @@
-const geocodingService = require('../services/geocodingService');
+const { geocodeLocation } = require('../services/mappingService');
 
-exports.geocode = async (req, res, next) => {
+async function geocode(req, res) {
   try {
-    const { text } = req.body;
-    if (!text) return res.status(400).json({ error: 'text is required' });
-    const geo = await geocodingService.geocodeLocation(text);
-    res.json(geo);
-  } catch (err) {
-    next(err);
+    const { location } = req.query;
+    if (!location) {
+      return res.status(400).json({ error: 'Location query parameter is required.' });
+    }
+    const coords = await geocodeLocation(location);
+    res.json(coords);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-}; 
+}
+
+module.exports = { geocode }; 

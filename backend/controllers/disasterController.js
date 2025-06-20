@@ -15,6 +15,9 @@ exports.createDisaster = async (req, res, next) => {
       ...req.validatedData,
       owner_id: req.user.id
     });
+    if (req.app && req.app.get('io')) {
+      req.app.get('io').emit('disaster_created', disaster);
+    }
     res.status(201).json(disaster);
   } catch (err) {
     next(err);
@@ -34,6 +37,9 @@ exports.getDisasterById = async (req, res, next) => {
 exports.updateDisaster = async (req, res, next) => {
   try {
     const updated = await supabaseService.updateDisaster(req.params.id, req.validatedData, req.user.id);
+    if (req.app && req.app.get('io')) {
+      req.app.get('io').emit('disaster_updated', updated);
+    }
     res.json(updated);
   } catch (err) {
     next(err);
@@ -43,6 +49,9 @@ exports.updateDisaster = async (req, res, next) => {
 exports.deleteDisaster = async (req, res, next) => {
   try {
     await supabaseService.deleteDisaster(req.params.id, req.user.id);
+    if (req.app && req.app.get('io')) {
+      req.app.get('io').emit('disaster_deleted', req.params.id);
+    }
     res.json({ success: true });
   } catch (err) {
     next(err);
